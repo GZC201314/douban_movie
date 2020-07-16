@@ -25,7 +25,7 @@ class ScrapySpiderSpider(scrapy.Spider):
 
             doubanItem['star'] = i_item.xpath(".//div[@class='star']//span[@class='rating_num']/text()").extract_first()
             doubanItem['evaluate'] = i_item.xpath(".//div[@class='star']//span[4]/text()").extract_first()
-            doubanItem['describe'] = i_item.xpath(".//div[@class='bd']//span[@class='inq']/text()").extract_first()
+            doubanItem['describetion'] = i_item.xpath(".//div[@class='bd']//span[@class='inq']/text()").extract_first()
             yield doubanItem
 
 #       下一页的数据处理

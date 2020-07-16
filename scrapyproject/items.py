@@ -24,5 +24,5 @@ class ScrapyprojectItem(scrapy.Item):
     # 评价
     evaluate = scrapy.Field()
     # 介绍
-    describe = scrapy.Field()
+    describetion = scrapy.Field()
 
