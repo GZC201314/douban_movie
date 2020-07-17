@@ -54,7 +54,7 @@ DOWNLOAD_DELAY = 0.5
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 # 启用IP代理,防止被爬取网站固定IP拦截
 # DOWNLOADER_MIDDLEWARES = {
-#    'scrapyproject.middlewares.my_proxy': 543,
+#    'scrapyproject.middlewares.  ': 543,
 # }
 
 # Enable or disable extensions
@@ -66,7 +66,7 @@ DOWNLOAD_DELAY = 0.5
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'scrapyproject.pipelines.ScrapyprojectPipeline': 300,
+   'scrapyproject.pipelines.DoubanBookPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
