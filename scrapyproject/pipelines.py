@@ -11,7 +11,6 @@ from douban_movie.scrapyproject.settings import mongo_db_collection,mongo_db_nam
 
 class ScrapyprojectPipeline(object):
     def __init__(self):
-        self.ids_seen = set()
         self.host = mongo_host
         self.port = mongo_port
         self.dbname = mongo_db_name
@@ -28,6 +27,7 @@ class ScrapyprojectPipeline(object):
     def process_item(self, item, spider):
         data = dict(item)
         # 去重
+
         if item['serial_number'] in self.ids_seen:
             raise DropItem("Duplicate item found: %s" % item)
         else:
@@ -60,27 +60,28 @@ class ScrapyprojectPipeline(object):
             return item
 
 class DoubanBookPipeline(object):
-    def __init__(self):
-        self.ids_seen = set()
-    # 重写插入数据的方法
+    #重写插入数据的方法
     def process_item(self, item, spider):
         data = dict(item)
         # 去重
-        if item['isbn'] in self.ids_seen:
+        sdb = pymysql.connect(host='localhost',
+                              user='root',
+                              password='abc123123',
+                              db='bookmanager',
+                              charset='utf8mb4',
+                              cursorclass=pymysql.cursors.DictCursor)
+        cursor = sdb.cursor()
+
+        sql = 'select * from doubanBook where isbn =%s'
+        cursor.execute(sql, (item['isbn']))
+        rows = cursor.fetchone()
+
+        if rows:
             raise DropItem("Duplicate item found: %s" % item)
         else:
-            self.ids_seen.add(item['isbn'])
             # mongodb 入库
             # self.post = self.mydb[self.sheetname]
             # self.post.insert(data)
-            # mysql 入库
-            sdb = pymysql.connect(host='localhost',
-                                       user='root',
-                                       password='abc123123',
-                                       db='bookmanager',
-                                       charset='utf8mb4',
-                                       cursorclass=pymysql.cursors.DictCursor)
-            cursor = sdb.cursor()
             table = 'doubanBook'
             keys = ', '.join(data.keys())
             values = ', '.join(['%s'] * len(data))

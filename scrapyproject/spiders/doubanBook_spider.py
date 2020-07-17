@@ -25,23 +25,23 @@ class ScrapySpiderSpider(scrapy.Spider):
     def bookparse(self, response):
         bookItems = BookItem()
         bookItems['name'] = response.xpath('//span[@property="v:itemreviewed"]/text()').extract_first()
-        bookItems['isbn'] = response.xpath('//span[./text()="ISBN:"]/following::text()[1]').extract_first()
-        bookItems['author'] = response.xpath('//span[./text()="作者:"]/following::text()[2]').extract_first()
+        bookItems['isbn'] = response.xpath('//span[contains(text(),"ISBN")]/following::text()[1]').extract_first()
+        bookItems['author'] = response.xpath('//span[contains(text(),"作者")]/following::text()[2]').extract_first()
         if bookItems["author"]:
             bookItems["author"] = [i.replace(" ", "") for i in bookItems["author"]]
             bookItems["author"] = "".join([i.replace("\n", " ") for i in bookItems["author"]])
-        bookItems['edition'] = response.xpath('//span[./text()="出品方:"]/following::text()[2]').extract_first()
-        bookItems['translate'] = response.xpath('//span[./text()="译者:"]/following::text()[2]').extract_first()
+        bookItems['edition'] = response.xpath('//span[contains(text(),"出品方")]/following::text()[2]').extract_first()
+        bookItems['translate'] = response.xpath('//span[contains(text(),"译者")]/following::text()[2]').extract_first()
         if bookItems['translate']:
             bookItems["translate"] = [i.replace(" ", "") for i in bookItems["translate"]]
             bookItems["translate"] = "".join([i.replace("\n", " ") for i in bookItems["translate"]])
         bookItems['score'] = response.xpath('//strong/text()').extract_first()
-        bookItems['publisher'] = response.xpath('//span[./text()="出版社:"]/following::text()[1]').extract_first()
-        bookItems['publishingTime'] = response.xpath('//span[./text()="出版年:"]/following::text()[1]').extract_first()
-        bookItems['folio'] = response.xpath('//span[./text()="页数:"]/following::text()[1]').extract_first()
-        bookItems['price'] = response.xpath('//span[./text()="定价:"]/following::text()[1]').extract_first()
-        bookItems['size'] = response.xpath('//span[./text()="装帧:"]/following::text()[1]').extract_first()
-        bookItems['seriesName'] = response.xpath('//span[./text()="丛书:"]/following::text()[2]').extract_first()
-        bookItems['introduction'] = response.xpath('//div[@class="intro"][1]//text()[1]').extract_first()
+        bookItems['publisher'] = response.xpath('//span[contains(text(),"出版社")]/following::text()[1]').extract_first()
+        bookItems['publishingTime'] = response.xpath('//span[contains(text(),"出版年")]/following::text()[1]').extract_first()
+        bookItems['folio'] = response.xpath('//span[contains(text(),"页数")]/following::text()[1]').extract_first()
+        bookItems['price'] = response.xpath('//span[contains(text(),"定价")]/following::text()[1]').extract_first()
+        bookItems['size'] = response.xpath('//span[contains(text(),"装帧")]/following::text()[1]').extract_first()
+        bookItems['seriesName'] = response.xpath('//span[contains(text(),"丛书")]/following::text()[2]').extract_first()
+        bookItems['introduction'] = response.xpath('//div[@class="indent"]//div//div[@class="intro"]//p/text()').extract_first()
         bookItems['image'] = response.xpath('//div[@id="mainpic"]//img/@src').extract_first()
         yield bookItems

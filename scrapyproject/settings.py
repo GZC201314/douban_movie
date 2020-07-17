@@ -53,9 +53,10 @@ DOWNLOAD_DELAY = 0.5
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 # 启用IP代理,防止被爬取网站固定IP拦截
-# DOWNLOADER_MIDDLEWARES = {
-#    'scrapyproject.middlewares.  ': 543,
-# }
+DOWNLOADER_MIDDLEWARES = {
+   'scrapyproject.middlewares.my_proxy': 543,
+   'scrapyproject.middlewares.my_useragent': 544,
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
