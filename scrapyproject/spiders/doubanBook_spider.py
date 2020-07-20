@@ -8,7 +8,7 @@ class ScrapySpiderSpider(scrapy.Spider):
     # 允许的域名,其他的域名将不会爬取
     allowed_domains = ["book.douban.com"]
     # 入口url
-    start_urls = ['https://book.douban.com/tag/%E5%B0%8F%E8%AF%B4']
+    start_urls = ['https://book.douban.com/tag/%E8%BF%91%E4%BB%A3%E5%8F%B2','https://book.douban.com/tag/%E5%93%B2%E5%AD%A6','https://book.douban.com/tag/%E5%9B%9E%E5%BF%86%E5%BD%95','https://book.douban.com/tag/%E7%BD%91%E7%BB%9C%E5%B0%8F%E8%AF%B4','https://book.douban.com/tag/%E8%89%BA%E6%9C%AF','https://book.douban.com/tag/%E9%87%91%E5%BA%B8','https://book.douban.com/tag/%E6%97%A5%E6%9C%AC%E6%BC%AB%E7%94%BB']
 
     def parse(self, response):
         # 获取图书详细信息的url

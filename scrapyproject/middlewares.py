@@ -8,6 +8,7 @@
 from scrapy import signals
 import requests
 import random
+import json
 import itertools
 class ScrapyprojectSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -58,26 +59,27 @@ class ScrapyprojectSpiderMiddleware(object):
 
 
 class my_proxy(object):
-
+    def __init__(self):
+        #
+        jsondata = '{"code":0,"data":[{"ip":"119.85.14.33","port":4542},{"ip":"36.57.94.162","port":4586},{"ip":"106.92.102.204","port":4537},{"ip":"124.112.223.82","port":4535},{"ip":"1.70.76.226","port":4536},{"ip":"60.175.213.28","port":4536},{"ip":"182.85.162.176","port":4532},{"ip":"183.154.212.14","port":4574},{"ip":"122.190.55.234","port":4554},{"ip":"122.4.53.192","port":4542},{"ip":"223.241.59.52","port":4545},{"ip":"183.7.36.211","port":4530},{"ip":"114.233.71.165","port":4526},{"ip":"122.4.54.63","port":4542},{"ip":"60.185.43.129","port":4576},{"ip":"220.188.135.215","port":4575},{"ip":"58.19.12.25","port":4528},{"ip":"114.98.172.89","port":4545},{"ip":"125.68.98.10","port":4572},{"ip":"100.97.238.83","port":4558}],"msg":"0","success":true}'
+        json_str = json.loads(jsondata)
+        ip_list = json_str['data']
+        self.iplist = []
+        for ip in ip_list:
+            self.iplist.append('http://' + ip['ip'] + ":" + str(ip['port']))
     def get_random_proxy(self):
-        ip_pool1 = [
-
-            "http://113.128.26.20:4564",
-            "http://125.123.155.64:4536"
-
-        ]
-        ip_pool = list(set(ip_pool1))
-        try:
-                proxy = random.choice(ip_pool)
-
-                print('get proxy ...')
-                ip = {"http": proxy}
-                r = requests.get("http://www.baidu.com", proxies=ip, timeout=4)
-                if r.status_code == 200:
-                    return proxy
-        except:
-            print('get proxy again ...')
-            return self.get_random_proxy()
+        if self.iplist:
+            proxy = random.choice(self.iplist)
+            try:
+                    print('get proxy ...')
+                    ip = {"http": proxy}
+                    r = requests.get("http://www.baidu.com", proxies=ip, timeout=4)
+                    if r.status_code == 200:
+                        return proxy
+            except:
+                print('get proxy again ...remove unusable IP '+proxy)
+                self.iplist.remove(proxy)
+                return self.get_random_proxy()
 
     def process_request(self,request,spider):
         thisip = self.get_random_proxy()
